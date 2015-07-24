@@ -38,7 +38,7 @@ static void soundCompletionCallback(SystemSoundID ssid, void* data);
  *  callbackId    The commmand callback id.
  *  dialogType    The type of alert view [alert | prompt].
  */
-- (void)showDialogWithMessage:(NSString*)message title:(NSString*)title buttons:(NSArray*)buttons defaultText:(NSString*)defaultText callbackId:(NSString*)callbackId dialogType:(NSString*)dialogType keyboardType:(NSString*)inputType
+- (void)showDialogWithMessage:(NSString*)message title:(NSString*)title buttons:(NSArray*)buttons defaultText:(NSString*)defaultText callbackId:(NSString*)callbackId dialogType:(NSString*)dialogType inputType:(NSString*)inputType
 {
     CDVAlertView* alertView = [[CDVAlertView alloc]
         initWithTitle:title
