@@ -38,7 +38,7 @@ static void soundCompletionCallback(SystemSoundID ssid, void* data);
  *  callbackId    The commmand callback id.
  *  dialogType    The type of alert view [alert | prompt].
  */
-- (void)showDialogWithMessage:(NSString*)message title:(NSString*)title buttons:(NSArray*)buttons defaultText:(NSString*)defaultText callbackId:(NSString*)callbackId dialogType:(NSString*)dialogType keyboardType:(NSString*)keyboardType
+- (void)showDialogWithMessage:(NSString*)message title:(NSString*)title buttons:(NSArray*)buttons defaultText:(NSString*)defaultText callbackId:(NSString*)callbackId dialogType:(NSString*)dialogType keyboardType:(NSString*)inputType
 {
     CDVAlertView* alertView = [[CDVAlertView alloc]
         initWithTitle:title
@@ -61,9 +61,16 @@ static void soundCompletionCallback(SystemSoundID ssid, void* data);
         textField.text = defaultText;
     }
 
-    if ([keyboardType isEqualToString:@"Number"]) 
+    if ([inputType isEqualToString:@"number"]) 
         [[alertView textFieldAtIndex:0] setKeyboardType:UIKeyboardTypeNumberPad];
-
+    else if ([inputType isEqualToString:@"password"])
+        alertView.alertViewStyle = UIAlertViewStyleSecureTextInput;
+    else if ([inputType isEqualToString:@"tel"])
+        [[alertView textFieldAtIndex:0] setKeyboardType:UIKeyboardTypePhonePad];
+    else if ([inputType isEqualToString:@"url"])
+        [[alertView textFieldAtIndex:0] setKeyboardType:UIKeyboardTypeURL];
+    else if ([inputType isEqualToString:@"email"])
+        [[alertView textFieldAtIndex:0] setKeyboardType:UIKeyboardTypeEmailAddress];
     [alertView show];
 }
 
@@ -74,7 +81,7 @@ static void soundCompletionCallback(SystemSoundID ssid, void* data);
     NSString* title = [command argumentAtIndex:1];
     NSString* buttons = [command argumentAtIndex:2];
 
-    [self showDialogWithMessage:message title:title buttons:@[buttons] defaultText:nil callbackId:callbackId dialogType:DIALOG_TYPE_ALERT keyboardType:nil];
+    [self showDialogWithMessage:message title:title buttons:@[buttons] defaultText:nil callbackId:callbackId dialogType:DIALOG_TYPE_ALERT inputType:nil];
 }
 
 - (void)confirm:(CDVInvokedUrlCommand*)command
@@ -84,7 +91,7 @@ static void soundCompletionCallback(SystemSoundID ssid, void* data);
     NSString* title = [command argumentAtIndex:1];
     NSArray* buttons = [command argumentAtIndex:2];
 
-    [self showDialogWithMessage:message title:title buttons:buttons defaultText:nil callbackId:callbackId dialogType:DIALOG_TYPE_ALERT keyboardType:nil];
+    [self showDialogWithMessage:message title:title buttons:buttons defaultText:nil callbackId:callbackId dialogType:DIALOG_TYPE_ALERT inputType:nil];
 }
 
 - (void)prompt:(CDVInvokedUrlCommand*)command
@@ -94,9 +101,9 @@ static void soundCompletionCallback(SystemSoundID ssid, void* data);
     NSString* title = [command argumentAtIndex:1];
     NSArray* buttons = [command argumentAtIndex:2];
     NSString* defaultText = [command argumentAtIndex:3];
-    NSString* keyboardType = [command argumentAtIndex:4];
+    NSString* inputType = [command argumentAtIndex:4];
 
-    [self showDialogWithMessage:message title:title buttons:buttons defaultText:defaultText callbackId:callbackId dialogType:DIALOG_TYPE_PROMPT keyboardType:keyboardType];
+    [self showDialogWithMessage:message title:title buttons:buttons defaultText:defaultText callbackId:callbackId dialogType:DIALOG_TYPE_PROMPT inputType:inputType];
 }
 
 /**
